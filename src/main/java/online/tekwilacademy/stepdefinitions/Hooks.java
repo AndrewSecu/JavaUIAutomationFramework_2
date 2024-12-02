@@ -1,6 +1,7 @@
 package online.tekwilacademy.stepdefinitions;
 
 import io.cucumber.java.*;
+import io.cucumber.java.BeforeAll;
 import online.tekwilacademy.managers.DriverManager;
 
 public class Hooks {
@@ -17,8 +18,8 @@ public class Hooks {
 
     @After
     public void executeAfterEachTest() {
-        System.out.println("The test is completed");
         DriverManager.getInstance().quiteTheDriver();
+        System.out.println("The test is completed");
     }
 
     @AfterAll
