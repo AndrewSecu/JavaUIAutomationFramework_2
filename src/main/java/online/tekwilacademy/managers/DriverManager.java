@@ -8,6 +8,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.safari.SafariDriver;
 
 import java.sql.Driver;
+import java.time.Duration;
 
 public class DriverManager {
     private static DriverManager instance;
@@ -39,6 +40,11 @@ public class DriverManager {
             default:
                 System.out.println("The Browser type is not defined: " + WEB_DRIVER_TYPE);
         }
+        int implicitWaitTime = Integer.valueOf(ConfigReaderManager.getProperty("implicitWaitTime"));
+        int pageLoadTime = Integer.valueOf(ConfigReaderManager.getProperty("pageLoadTime"));
+
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
     }
 
     public static DriverManager getInstance() {
@@ -48,11 +54,11 @@ public class DriverManager {
         return instance;
     }
 
-    public WebDriver getDriver(){
+    public WebDriver getDriver() {
         return driver;
     }
 
-    public void quiteTheDriver(){
+    public void quiteTheDriver() {
         driver.quit();
         driver = null;
         instance = null;

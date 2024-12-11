@@ -6,18 +6,21 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import online.tekwilacademy.managers.ConfigReaderManager;
 import online.tekwilacademy.managers.DriverManager;
+import online.tekwilacademy.managers.ExplicitWaitManager;
 import online.tekwilacademy.managers.ScrollManager;
-import online.tekwilacademy.pageobjects.Page;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 public class GenericSteps {
+    private static final Logger logger = LogManager.getLogger(GenericSteps.class);
     WebDriver driver = DriverManager.getInstance().getDriver();
 
     @Then("the URL contains the following keyword {string}")
@@ -31,6 +34,7 @@ public class GenericSteps {
     public void theIsAccessed(String endpoint) {
         String fullLink = ConfigReaderManager.getProperty("baseUrl") + endpoint;
         driver.get(fullLink);
+        logger.log(Level.WARN, "The page " + fullLink + " is accessed");
         System.out.println("The accessed link is:" + fullLink);
     }
 
@@ -47,6 +51,7 @@ public class GenericSteps {
     public void theFollowingListOfErrorMessagesIsDisplayed(List<String> listOfErrors) throws InterruptedException {
         Thread.sleep(500);
         listOfErrors.forEach(errorMessage -> {
+            logger.log(Level.INFO, "The asserted message is: " + errorMessage);
             boolean messageIsDisplayed = driver.findElement(By.xpath(".//*[contains(text(),'" +
                     errorMessage + "')]")).isDisplayed();
             Assertions.assertTrue(messageIsDisplayed, "The error message is displayed");
@@ -60,6 +65,8 @@ public class GenericSteps {
         webClickableElementField.setAccessible(true);
         WebElement webClickableElement = (WebElement) webClickableElementField.get(classInstance.getConstructor(WebDriver.class).newInstance(driver));
         ScrollManager.scrollToElement(webClickableElement);
+        ExplicitWaitManager.waitTillElementIsClickable(webClickableElement);
         webClickableElement.click();
+        logger.log(Level.INFO, "The button: " + clickableElement + " from page " + pageName + " has been clicked");
     }
 }
