@@ -10,7 +10,7 @@ public class ScrollManager {
         WebDriver driver = DriverManager.getInstance().getDriver();
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
         try {
-            Thread.sleep(1000);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

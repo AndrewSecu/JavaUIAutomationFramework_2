@@ -3,28 +3,31 @@ package online.tekwilacademy.stepdefinitions;
 import io.cucumber.java.*;
 import io.cucumber.java.BeforeAll;
 import online.tekwilacademy.managers.DriverManager;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Hooks {
 
+    private static final Logger logger = LogManager.getLogger(Hooks.class);
+
     @BeforeAll
     public static void beforeAll() {
-        System.out.println("The execution of the test suite started");
+        logger.log(Level.INFO,"The execution of the test suite started");
     }
 
     @Before
     public void executedBeforeEachTest() {
-        System.out.println("Test started");
+        logger.log(Level.INFO,"Test started");
     }
 
     @After
     public void executeAfterEachTest() {
         DriverManager.getInstance().quiteTheDriver();
-        System.out.println("The test is completed");
-    }
+        logger.log(Level.INFO,"Test completed");    }
 
     @AfterAll
     public static void afterAll() {
-        System.out.println("The test execution finished");
+        logger.log(Level.INFO,"The test execution finished");
     }
-
 }
